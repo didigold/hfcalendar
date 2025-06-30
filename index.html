@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Vacaciones - Equipo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__left">
+            <h1 class="header__title">📅 Calendario de Vacaciones</h1>
+        </div>
+        <div class="header__center">
+            <div class="view-selector">
+                <button class="btn btn--sm view-btn active" data-view="month">Mes</button>
+                <button class="btn btn--sm view-btn" data-view="week">Semana</button>
+                <button class="btn btn--sm view-btn" data-view="year">Año</button>
+            </div>
+            <div class="calendar-navigation">
+                <button class="btn btn--sm nav-btn" id="prevMonth">‹</button>
+                <button class="btn btn--sm" id="todayBtn">Hoy</button>
+                <button class="btn btn--sm nav-btn" id="nextMonth">›</button>
+            </div>
+        </div>
+        <div class="header__right">
+            <div class="header-controls">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="showWeekNumbers" checked>
+                    <span>Números de semana</span>
+                </label>
+                <div class="user-info">
+                    <span class="current-user-name">Ana García</span>
+                    <span class="user-role admin">Admin</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Miembros del Equipo</h3>
+                <div class="team-members" id="teamMembers">
+                    <!-- Team members will be populated by JavaScript -->
+                </div>
+                <button class="btn btn--secondary btn--full-width" id="manageMembers">
+                    Gestionar Miembros
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Filtros</h3>
+                <div class="filter-group">
+                    <h4>Tipo de Vacaciones</h4>
+                    <div class="vacation-type-filters" id="vacationTypeFilters">
+                        <!-- Vacation type filters will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Vista</h4>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="overlayMode">
+                        <span>Modo Overlay</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="showOnlyMyVacations">
+                        <span>Solo mis vacaciones</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Leyenda</h3>
+                <div class="legend" id="legend">
+                    <!-- Legend will be populated by JavaScript -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Calendar -->
+        <main class="calendar-container">
+            <div class="calendar-header">
+                <h2 class="calendar-month-year" id="calendarMonthYear">Julio 2025</h2>
+                <div class="calendar-view-options">
+                    <button class="btn btn--sm" id="addVacationBtn">+ Añadir Vacación</button>
+                </div>
+            </div>
+
+            <div class="calendar-wrapper">
+                <div class="calendar" id="calendar">
+                    <!-- Calendar will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for adding/editing vacations -->
+    <div class="modal-overlay" id="vacationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Añadir Vacación</h3>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="vacationForm">
+                    <div class="form-group">
+                        <label class="form-label">Empleado</label>
+                        <select class="form-control" id="vacationMember" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha de Inicio</label>
+                        <input type="date" class="form-control" id="vacationStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha de Fin</label>
+                        <input type="date" class="form-control" id="vacationEndDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Vacación</label>
+                        <select class="form-control" id="vacationType" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notas (opcional)</label>
+                        <textarea class="form-control" id="vacationNotes" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="vacationApproved">
+                            <span>Aprobado</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" id="cancelVacation">Cancelar</button>
+                <button class="btn btn--primary" id="saveVacation">Guardar</button>
+                <button class="btn btn--secondary" id="deleteVacation" style="display:none;">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for managing team members -->
+    <div class="modal-overlay" id="membersModal">
+        <div class="modal modal--large">
+            <div class="modal-header">
+                <h3>Gestionar Miembros del Equipo</h3>
+                <button class="modal-close" id="closeMembersModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="members-management">
+                    <div class="add-member-section">
+                        <h4>Añadir Nuevo Miembro</h4>
+                        <form id="memberForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="memberName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="memberEmail" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Rol</label>
+                                    <select class="form-control" id="memberRole" required>
+                                        <option value="viewer">Viewer</option>
+                                        <option value="editor">Editor</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Color</label>
+                                    <div class="color-picker" id="colorPicker">
+                                        <!-- Color options will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn--primary">Añadir Miembro</button>
+                        </form>
+                    </div>
+                    <div class="existing-members-section">
+                        <h4>Miembros Existentes</h4>
+                        <div class="members-list" id="membersList">
+                            <!-- Members list will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

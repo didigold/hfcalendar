@@ -1,2 +1,0 @@
-# hfcalendar
-Human Factors calendar

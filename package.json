@@ -17,7 +17,7 @@
     "dotenv": "^16.3.1",
     "helmet": "^7.0.0",
     "compression": "^1.7.4",
-    "better-sqlite3": "^8.4.0"
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
